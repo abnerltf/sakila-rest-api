@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.servlet.http.HttpServletRequest;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -82,6 +84,35 @@ public class CustomerController
 
 		jsonResult = jsonBuilder.build();
 		return jsonResult.toString();
+	}
+
+	@PostMapping("/api/v1/customer")
+	@ResponseBody
+	public String createCustomer(HttpServletRequest request) throws SQLException
+	{
+		if(request.getParameterMap().size() <= 0)
+		{
+			return Json.createObjectBuilder().add("error", "No parameters found").build().toString();
+		} else {
+			if(request.getParameterMap().containsKey("store_id") &&
+			   request.getParameterMap().containsKey("first_name") &&
+			   request.getParameterMap().containsKey("last_name") &&
+			   request.getParameterMap().containsKey("email") &&
+			   request.getParameterMap().containsKey("address_id"))
+			{
+				Connection conn = this.dataSource.getConnection();
+				PreparedStatement statement = conn.prepareStatement("INSERT INTO customer(store_id, first_name, last_name, email, address_id) "+
+										"VALUES(?, ?, ?, ?, ?)");
+				statement.setInt(1, Integer.valueOf(request.getParameter("store_id")));
+				statement.setString(2, request.getParameter("first_name"));
+				statement.setString(3, request.getParameter("last_name"));
+				statement.setString(4, request.getParameter("email"));
+				statement.setInt(5, Integer.valueOf(request.getParameter("address_id")));
+				statement.execute();
+			}
+		}
+
+		return new String();
 	}
 
 	private ArrayList<String> getColumns(ResultSet queryResult) throws SQLException
