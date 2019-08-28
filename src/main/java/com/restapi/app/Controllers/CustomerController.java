@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.servlet.http.HttpServletRequest;
+
 import com.mysql.cj.jdbc.MysqlDataSource;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
@@ -93,8 +95,7 @@ public class CustomerController
 		if(request.getParameterMap().size() <= 0)
 		{
 			return Json.createObjectBuilder().add("error", "No parameters found").build().toString();
-		} else {
-			if(request.getParameterMap().containsKey("store_id") &&
+		} else if(request.getParameterMap().containsKey("store_id") &&
 			   request.getParameterMap().containsKey("first_name") &&
 			   request.getParameterMap().containsKey("last_name") &&
 			   request.getParameterMap().containsKey("email") &&
@@ -109,8 +110,9 @@ public class CustomerController
 				statement.setString(4, request.getParameter("email"));
 				statement.setInt(5, Integer.valueOf(request.getParameter("address_id")));
 				statement.execute();
+
+				return Json.createObjectBuilder().add("Message", "Registration complete").build().toString();
 			}
-		}
 
 		return new String();
 	}
