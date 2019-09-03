@@ -1,4 +1,4 @@
-package com.restapi.app.Controllers;
+package com.restapi.app.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.inject.Inject;
 
 @Controller
 public class CustomerController
@@ -127,10 +126,10 @@ public class CustomerController
 				statement.setInt(5, Integer.valueOf(request.getParameter("address_id")));
 				statement.execute();
 
-				return Json.createObjectBuilder().add("Message", "Registration complete").build().toString();
+				return Json.createObjectBuilder().add("message", "Registration complete").build().toString();
 			}
 
-		return new String();
+		return Json.createObjectBuilder().add("error", "invalid request").build().toString();
 	}
 
 	private ArrayList<String> getColumns(ResultSet queryResult) throws SQLException

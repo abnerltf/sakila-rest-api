@@ -1,4 +1,4 @@
-package com.restapi.app.Controllers;
+package com.restapi.app.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,9 +64,15 @@ public class LoginController
 				session.setAttribute("authenticated", true);
 				return Json.createObjectBuilder().add("message", "Authentication successful").build().toString();
 			}
-			else if(result.getMetaData().getColumnCount() == 0)
+			else if(result.getRow() == 0)
 			{
 				return Json.createObjectBuilder().add("message", "Authentication failed").build().toString();
+			}
+			else if(result.getRow() > 1)
+			{
+				HttpSession session = request.getSession();
+				session.setAttribute("authenticated", true);
+				return Json.createObjectBuilder().add("message", "Authentication successful").build().toString();
 			}
 		}
 

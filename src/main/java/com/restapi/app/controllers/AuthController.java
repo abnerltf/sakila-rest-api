@@ -1,4 +1,4 @@
-package com.restapi.app.Controllers;
+package com.restapi.app.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
