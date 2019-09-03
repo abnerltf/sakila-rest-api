@@ -1,4 +1,4 @@
-package com.restapi.app.controllers;
+package com.restapi.app.Controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.inject.Inject;
 
 @Controller
 public class CustomerController
@@ -40,8 +41,13 @@ public class CustomerController
 
 	@GetMapping(value="/api/v1/customer/{userId}", produces="application/json")
 	@ResponseBody
-	public String getUser(@PathVariable("userId") int userId) throws SQLException
+	public String getUser(@PathVariable("userId") int userId, HttpServletRequest request) throws SQLException
 	{
+		if( !(AuthController.isAuthenticated(request)) )
+		{
+			return Json.createObjectBuilder().add("error", "not authenticated").build().toString();
+		} 
+
 		JsonObject jsonResult = Json.createObjectBuilder().build();
 		JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
 
@@ -64,8 +70,13 @@ public class CustomerController
 
 	@GetMapping(value = "/api/v1/customers", produces = "application/json")
 	@ResponseBody
-	public String getUsers() throws SQLException
+	public String getUsers(HttpServletRequest request) throws SQLException
 	{
+		if( !(AuthController.isAuthenticated(request)) )
+		{
+			return Json.createObjectBuilder().add("error", "not authenticated").build().toString();
+		} 
+
 		JsonObject jsonResult = Json.createObjectBuilder().build();
 		JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
 
@@ -92,6 +103,11 @@ public class CustomerController
 	@ResponseBody
 	public String createCustomer(HttpServletRequest request) throws SQLException
 	{
+		if( !(AuthController.isAuthenticated(request)) )
+		{
+			return Json.createObjectBuilder().add("error", "not authenticated").build().toString();
+		} 
+
 		if(request.getParameterMap().size() <= 0)
 		{
 			return Json.createObjectBuilder().add("error", "No parameters found").build().toString();

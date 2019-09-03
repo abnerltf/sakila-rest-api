@@ -1,4 +1,4 @@
-package com.restapi.app;
+package com.restapi.app.Controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.mysql.cj.jdbc.MysqlDataSource;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
@@ -58,13 +60,14 @@ public class LoginController
 
 			if(result.getRow() == 1)
 			{
+				HttpSession session = request.getSession();
+				session.setAttribute("authenticated", true);
 				return Json.createObjectBuilder().add("message", "Authentication successful").build().toString();
 			}
 			else if(result.getMetaData().getColumnCount() == 0)
 			{
 				return Json.createObjectBuilder().add("message", "Authentication failed").build().toString();
 			}
-			
 		}
 
 		return Json.createObjectBuilder().add("error", "Invalid request").build().toString();

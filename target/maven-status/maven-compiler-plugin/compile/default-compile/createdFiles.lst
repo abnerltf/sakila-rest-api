@@ -1,3 +1,4 @@
-com/restapi/app/LoginController.class
-com/restapi/app/controllers/CustomerController.class
+com/restapi/app/Controllers/CustomerController.class
+com/restapi/app/Controllers/AuthController.class
 com/restapi/app/App.class
+com/restapi/app/Controllers/LoginController.class
